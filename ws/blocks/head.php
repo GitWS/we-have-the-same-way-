@@ -4,3 +4,4 @@
 <script type="text/javascript" src="./script/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="./script/auth.js"></script>
 <script type="text/javascript" src="./script/reg.js"></script>
+<script type="text/javascript" src="./script/relog.js"></script>

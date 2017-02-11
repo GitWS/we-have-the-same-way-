@@ -60,6 +60,12 @@ header #RegAuto {
 	float: left;
 }
 
+header #Relog {
+	width: 25%;
+	padding: 1%;
+	float: left;
+}
+
 /* Стили основного блока */
 
 #wrapper {
