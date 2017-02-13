@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2017 at 01:14 PM
+-- Generation Time: Feb 13, 2017 at 10:11 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -24,17 +24,31 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `auth` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(20) CHARSET cp1251, OUT `result` INT UNSIGNED)  IF(SELECT COUNT(*) FROM users WHERE login = user_login AND pass = user_pass)THEN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `auth` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(20) CHARSET cp1251, OUT `result` INT UNSIGNED)  IF(SELECT COUNT(*) FROM account_user WHERE login = account_login AND pass = account_pass)THEN
 SET result = 1;
 ELSE
 SET result = 0;
 END IF$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `regthis` (IN `login` VARCHAR(45), IN `pass` VARCHAR(45), IN `email` VARCHAR(45), IN `phone` VARCHAR(45))  MODIFIES SQL DATA
-INSERT INTO users (user_login,user_pass,user_email,user_phone)
+INSERT INTO account_user (acount_login, account_pass, account_email, account_phone)
 VALUES (login, pass, email, phone)$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_user`
+--
+
+CREATE TABLE `account_user` (
+  `account_id` int(11) NOT NULL,
+  `account_login` varchar(45) NOT NULL,
+  `account_pass` varchar(45) NOT NULL,
+  `account_email` varchar(45) NOT NULL,
+  `account_phone` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -43,10 +57,24 @@ DELIMITER ;
 --
 
 CREATE TABLE `passenger_info` (
-  `passenger_id` int(13) UNSIGNED ZEROFILL NOT NULL,
-  `passenger_fio` varchar(255) NOT NULL,
+  `passenger_id` int(13) NOT NULL,
   `passenger_phone` varchar(15) NOT NULL,
   `passenger_sex` varchar(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profile_user`
+--
+
+CREATE TABLE `profile_user` (
+  `profile_id` int(11) NOT NULL,
+  `account_user_id` int(11) NOT NULL,
+  `profile_name` varchar(45) NOT NULL,
+  `profile_last_name` varchar(45) NOT NULL,
+  `profile_birthdate` date NOT NULL,
+  `profile_sex` varchar(14) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -56,12 +84,8 @@ CREATE TABLE `passenger_info` (
 --
 
 CREATE TABLE `rider_info` (
-  `rider_id` int(11) UNSIGNED ZEROFILL NOT NULL,
-  `rider_fio` varchar(255) NOT NULL,
-  `rider_phone` varchar(13) NOT NULL,
-  `rider_machine` varchar(15) NOT NULL,
-  `rider_age` varchar(5) NOT NULL,
-  `rider_sex` varchar(12) NOT NULL
+  `rider_id` int(11) NOT NULL,
+  `rider_machine` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -94,39 +118,28 @@ CREATE TABLE `ride_info` (
   `ride_comment` varchar(512) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `user_login` varchar(45) CHARACTER SET cp1251 COLLATE cp1251_bin NOT NULL,
-  `user_email` varchar(55) CHARACTER SET cp1251 COLLATE cp1251_bin NOT NULL,
-  `user_pass` varchar(20) CHARACTER SET cp1251 COLLATE cp1251_bin NOT NULL,
-  `user_phone` varchar(15) CHARACTER SET cp1251 COLLATE cp1251_bin NOT NULL,
-  `user_reg_data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `user_login`, `user_email`, `user_pass`, `user_phone`, `user_reg_data`) VALUES
-(11, '??????', 'gareks@yandex.ru', '12345rvsCSSraze', '89104219908', '2017-02-10 09:53:45'),
-(41, 'app', '1', '1', '89261698700', '2017-02-10 12:08:08'),
-(43, '9', '9', '9', '9', '2017-02-10 12:09:12');
-
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `account_user`
+--
+ALTER TABLE `account_user`
+  ADD PRIMARY KEY (`account_id`);
 
 --
 -- Indexes for table `passenger_info`
 --
 ALTER TABLE `passenger_info`
   ADD PRIMARY KEY (`passenger_id`);
+
+--
+-- Indexes for table `profile_user`
+--
+ALTER TABLE `profile_user`
+  ADD PRIMARY KEY (`profile_id`),
+  ADD KEY `account_user_profile` (`account_user_id`);
 
 --
 -- Indexes for table `rider_info`
@@ -150,28 +163,29 @@ ALTER TABLE `ride_info`
   ADD KEY `rider_id` (`rider_id`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `login` (`user_login`),
-  ADD UNIQUE KEY `email` (`user_email`),
-  ADD UNIQUE KEY `phone` (`user_phone`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
+-- AUTO_INCREMENT for table `account_user`
+--
+ALTER TABLE `account_user`
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `passenger_info`
 --
 ALTER TABLE `passenger_info`
-  MODIFY `passenger_id` int(13) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
+  MODIFY `passenger_id` int(13) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `profile_user`
+--
+ALTER TABLE `profile_user`
+  MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `rider_info`
 --
 ALTER TABLE `rider_info`
-  MODIFY `rider_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT;
+  MODIFY `rider_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `ride_form`
 --
@@ -183,10 +197,27 @@ ALTER TABLE `ride_form`
 ALTER TABLE `ride_info`
   MODIFY `ride_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `users`
+-- Constraints for dumped tables
 --
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- Constraints for table `passenger_info`
+--
+ALTER TABLE `passenger_info`
+  ADD CONSTRAINT `pass_ride_form` FOREIGN KEY (`passenger_id`) REFERENCES `ride_form` (`pass_id`);
+
+--
+-- Constraints for table `profile_user`
+--
+ALTER TABLE `profile_user`
+  ADD CONSTRAINT `account_user_profile` FOREIGN KEY (`account_user_id`) REFERENCES `account_user` (`account_id`);
+
+--
+-- Constraints for table `rider_info`
+--
+ALTER TABLE `rider_info`
+  ADD CONSTRAINT `rider_info_ibfk_1` FOREIGN KEY (`rider_id`) REFERENCES `ride_info` (`rider_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
