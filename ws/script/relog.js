@@ -5,7 +5,6 @@ function relog(){
 		cache: false,
 		dataType: 'html',
 		success: function (data){
-			alert(data);
 		}
 	});
 }

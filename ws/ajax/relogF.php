@@ -1,6 +1,7 @@
 <?php  
 session_start();
 $_SESSION['LoginUser'] = "";
-$_SESSION['Connect'] = 1;
-echo "До свидания!";
+$_SESSION['Connect'] = 0;
+header ('Location: ./index.php');
+exit();
 ?>

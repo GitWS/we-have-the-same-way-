@@ -18,5 +18,18 @@
 
 	$result = mysqli_query($con, $query);
 
-	echo 'Регистрация пройдена!';
+	$query2 = "call auth(\"".iconv("UTF-8", "windows-1251", $log)."\",\"".iconv("UTF-8", "windows-1251", $pas)."\",@result);";
+
+	$result2 = mysqli_query($con, $query2);
+	$res_select = mysqli_query($con, "select @result;");
+
+	while($row= mysqli_fetch_row($res_select)){
+		$res_query = $row[0];
+	}
+
+	if($res_query == 1){
+		echo 'Вы успешно зарегистрировались!';
+	}
+	else
+		echo 'Произошла ошибка!';
 ?>
