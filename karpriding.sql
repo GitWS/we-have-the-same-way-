@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 14, 2017 at 09:20 AM
+-- Generation Time: Feb 15, 2017 at 10:38 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -19,18 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `karpriding`
 --
-
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `auth` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(20) CHARSET cp1251, OUT `result` INT UNSIGNED)  SET result = (SELECT COUNT(*) FROM account_user WHERE login = account_login AND pass = account_pass)$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `regthis` (IN `login` VARCHAR(45), IN `pass` VARCHAR(45), IN `email` VARCHAR(45), IN `phone` VARCHAR(45))  MODIFIES SQL DATA
-INSERT INTO account_user (account_login, account_pass, account_email, account_phone)
-VALUES (login, pass, email, phone)$$
-
-DELIMITER ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
