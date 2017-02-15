@@ -37,7 +37,7 @@
 					</tr>
 					<tr>
 						<td>Дата поездки:</td>
-						<td><input type="text" name="" id="orderDate"></td>
+						<td><input type="date" name="" id="orderDate"></td>
 					</tr>
 					<tr>
 						<td>Машина:</td>

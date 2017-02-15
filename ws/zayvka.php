@@ -37,7 +37,7 @@
 					</tr>
 					<tr>
 						<td>Дата поездки:</td>
-						<td><input type="text" name="" id="zavDate"></td>
+						<td><input type="date" name="" id="zavDate"></td>
 					</tr>
 					<tr>
 						<td>Нужно мест:</td>
