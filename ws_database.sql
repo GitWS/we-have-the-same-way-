@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2017 at 10:11 AM
+-- Generation Time: Feb 18, 2017 at 09:03 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 7.1.1
 
@@ -20,6 +20,42 @@ SET time_zone = "+00:00";
 -- Database: `ws_database`
 --
 
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `auth` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(45) CHARSET cp1251, OUT `result` INT)  NO SQL
+IF EXISTS (SELECT * FROM reg_data WHERE reg_login = login AND reg_pass = pass) THEN
+SET result = 1;
+ELSE
+SET result = 0;
+END IF$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_new_order` (IN `date_time` DATETIME, IN `need_point1` VARCHAR(45) CHARSET cp1251, IN `meet_point1` VARCHAR(45) CHARSET cp1251, IN `ride_price` VARCHAR(45) CHARSET cp1251, IN `ride_comment1` VARCHAR(255) CHARSET cp1251)  NO SQL
+INSERT INTO ride_rider_table (date_time_ride, need_point, meet_point, ride_price, ride_comment)
+VALUES (date_time, need_point1, meet_point1, ride_price, ride_price)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reg_new` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(45) CHARSET cp1251, IN `reg_type` INT)  NO SQL
+IF NOT EXISTS(SELECT * FROM reg_data WHERE reg_login = login AND reg_pass = pass) THEN
+INSERT INTO reg_data(reg_login, reg_pass, id_stat_type)
+VALUES(login, pass, reg_type);
+END IF$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_and_create_pass_order` (IN `ride_date_time` DATETIME, IN `need_point1` VARCHAR(45) CHARSET cp1251, IN `meet_point1` VARCHAR(45) CHARSET cp1251, IN `user_login` VARCHAR(45))  NO SQL
+IF EXISTS(SELECT * FROM ride_rider_table 
+WHERE date_time_ride = ride_date_time AND need_point AND meet_point = meet_point1) THEN
+SELECT meet_point AND need_point AND ride_price
+FROM ride_rider_table
+WHERE date_time_ride = ride_date_time AND need_point = need_point1 AND meet_point = meet_point1;
+ELSE
+INSERT INTO pass_ride_order(date_time_ride,ride_needpoint_pass,ride_meetpoint_pass, by_pass_created_id)
+VALUES
+(ride_date_time, need_point1, meet_point1,
+(SELECT * FROM reg_data WHERE user_login = reg_login and id_stat_type = 2));
+END IF$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -28,9 +64,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `pass_ride_order` (
   `passenger_id_ride` int(11) NOT NULL,
-  `date_time_ride` int(11) NOT NULL,
-  `ride_needpoint_pass` int(11) NOT NULL,
-  `ride_meetpoint_pass` int(11) NOT NULL,
+  `date_time_ride` datetime NOT NULL,
+  `ride_needpoint_pass` varchar(45) COLLATE cp1251_bin NOT NULL,
+  `ride_meetpoint_pass` varchar(45) COLLATE cp1251_bin NOT NULL,
   `by_pass_created_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
@@ -89,7 +125,10 @@ CREATE TABLE `reg_data` (
 
 INSERT INTO `reg_data` (`id_reg_data`, `reg_login`, `reg_pass`, `id_stat_type`) VALUES
 (1, 'login', 'password', 1),
-(2, 'login1', 'password', 2);
+(2, 'login1', 'password', 2),
+(3, 'login', 'password', 1),
+(4, 'login', 'password', 1),
+(6, 'dawdawd', 'dawdadzfdfhfther', 2);
 
 -- --------------------------------------------------------
 
@@ -124,7 +163,7 @@ CREATE TABLE `ride_rider_table` (
   `need_point` varchar(45) COLLATE cp1251_bin NOT NULL,
   `creator_id` int(11) NOT NULL,
   `ride_price` varchar(45) COLLATE cp1251_bin NOT NULL,
-  `comment` varchar(512) COLLATE cp1251_bin NOT NULL
+  `ride_comment` varchar(512) COLLATE cp1251_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
 --
@@ -180,12 +219,12 @@ ALTER TABLE `ride_rider_table`
 -- AUTO_INCREMENT for table `pass_ride_order`
 --
 ALTER TABLE `pass_ride_order`
-  MODIFY `passenger_id_ride` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `passenger_id_ride` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `profile_pass`
 --
 ALTER TABLE `profile_pass`
-  MODIFY `profile_pass_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `profile_pass_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `profile_rider`
 --
@@ -195,7 +234,7 @@ ALTER TABLE `profile_rider`
 -- AUTO_INCREMENT for table `reg_data`
 --
 ALTER TABLE `reg_data`
-  MODIFY `id_reg_data` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_reg_data` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `reg_type_table`
 --
