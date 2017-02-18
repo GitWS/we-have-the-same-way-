@@ -98,12 +98,48 @@ header #menu #no_session {
 	float: left;
 }
 
-header #menu #passenger {
+header #menu #menuUser {
 	float: left;
 }
 
-header #menu #driver {
-	float: left;
+.menu ul li{
+
+}
+.menu ul > li:hover{
+
+}
+.menu ul ul > li:hover{
+  background-color: blue;
+}
+.menu ul li, .menu ul{
+  display: inline-block;
+}
+.menu ul{
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.menu ul ul{
+  display: none;
+  position: absolute;
+  background-color: black;
+  color: white;
+  margin-left: -10px;
+}
+.menu ul a{
+  color: black;
+  text-decoration: none;
+}
+.menu ul ul a{
+  color: white;
+  text-decoration: none;
+}
+.menu li:hover ul{
+  display: block;
+}
+
+.menu li:hover li{
+  display: block;
 }
 
 /* Стили основного блока */

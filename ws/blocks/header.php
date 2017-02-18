@@ -8,13 +8,20 @@
 			Авторизируйтесь для получения функциий!
 		</div>
 
-		<div id="passenger">
-			Спасибо за использование нашего сервиса!
-		</div>
-
-		<div id="driver">
-			<label>Меню:</label>
-			<button>Создать предложение</button>
+		<div id="menuUser">
+			<nav class="menu">
+  				<ul>
+				    <li><a href="#">Меню</a>
+						<ul>
+				        <li id="search">Поиск предложения по коментарию</li>
+						<li id="popular">Популярный маршрут</li>
+						<li id="maxOrder">Пользователь с большим количеством предложений</li>
+						<li id="rare">Самый редкий маршрут</li>
+						<li id="createOrder">Создать предложение</li>
+				      	</ul>
+				    </li>
+			  	</ul>
+			</nav>
 		</div>
 	</div>
 
@@ -35,8 +42,7 @@
 			$("header #RegAuto #exit").hide();
 			//Меню
 			$("header #menu #no_session").show();
-			$("header #menu #passenger").hide();
-			$("header #menu #driver").hide();
+			$("header #menu #menuUser").hide();
 		} else {
 			//Регистрация|Авторизация
 			$("header #RegAuto #register").hide();
@@ -46,12 +52,12 @@
 			//Меню
 			if(status_user == 1){
 				$("header #menu #no_session").hide();
-				$("header #menu #driver").hide();
-				$("header #menu #passenger").show();
+				$("header #menu #menuUser").show();
+				$(".menu #createOrder").hide();
 			} else {
 				$("header #menu #no_session").hide();
-				$("header #menu #passenger").hide();
-				$("header #menu #driver").show();
+				$("header #menu #menuUser").show();
+				$(".menu #createOrder").show();
 			}
 		}
 
@@ -64,6 +70,22 @@
 		});
 		$("header #RegAuto #exit").click(function(){
 			alert("Выход");
+		});
+		//Функции меню
+		$(".menu #search").click(function(){
+			alert("Поиск");
+		});
+		$(".menu #popular").click(function(){
+			alert("Популярный маршрут");
+		});
+		$(".menu #maxOrder").click(function(){
+			alert("Поиск по коментарию");
+		});
+		$(".menu #rare").click(function(){
+			alert("Редкий маршрут");
+		});
+		$(".menu #createOrder").click(function(){
+			location.href = "./createOrderPassanger.php";
 		});
 
 	</script>
