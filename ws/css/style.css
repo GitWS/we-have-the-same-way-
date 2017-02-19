@@ -59,6 +59,13 @@ input {
 	padding: 4px;
 }
 
+textarea {
+	background-color: black;
+	border: 2px solid white;
+	color: white;
+	padding: 4px;
+}
+
 /* Стили шапки */
 
 header {

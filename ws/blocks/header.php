@@ -50,7 +50,7 @@
 			$("header #RegAuto #LabelLogin").show();
 			$("header #RegAuto #exit").show();
 			//Меню
-			if(status_user == 1){
+			if(status_user == 2){
 				$("header #menu #no_session").hide();
 				$("header #menu #menuUser").show();
 				$(".menu #createOrder").hide();

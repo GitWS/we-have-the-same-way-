@@ -4,8 +4,6 @@
 	<?php require_once ("blocks/head.php") ?>
 	<?php 
 	require_once ("script/config.php");
-	$connect = mysqli_connect(HOST,USER,PASSWORD) or die("Ошибка подключения к серверу");
-	$bd = mysqli_select_db($connect,DATABASE) or die(' База данных не найдена или отсутствует доступ.');
 	?>
 </head>
 <body>
@@ -37,19 +35,6 @@
 						<td><input type="text" name="name"></td>
 					</tr>
 					<tr>
-						<td><label>Пол:</label></td>
-						<td>
-							<select name="gender">
-								<option>Мужчина</option>
-								<option>Женщина</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td><label>Возраст:</label></td>
-						<td><input type="text" name="age"></td>
-					</tr>
-					<tr>
 						<td><label>Номер телефона:</label></td>
 						<td><input type="text" name="phone"></td>
 					</tr>
@@ -59,6 +44,19 @@
 							<input type="radio" name="type" value="0" checked>Водитель
 							<input type="radio" name="type" value="1">Пассажир
    						</td>
+					</tr>
+					<tr id="pol">
+						<td><label>Пол:</label></td>
+						<td>
+							<select name="gender">
+								<option>Мужчина</option>
+								<option>Женщина</option>
+							</select>
+						</td>
+					</tr>
+					<tr id="ages">
+						<td><label>Возраст:</label></td>
+						<td><input type="text" name="age"></td>
 					</tr>
 					<tr id="car">
 						<td><label>Марка машины:</label></td>
@@ -84,8 +82,12 @@
 	$("input[name=type]").click(function(){
 		if(Number($("input[name=type]:checked").val()) == 1){
 			$("#wrapper #content #infoRegistration #car").hide();
+			$("#wrapper #content #infoRegistration #pol").hide();
+			$("#wrapper #content #infoRegistration #ages").hide();
 		} else {
 			$("#wrapper #content #infoRegistration #car").show();
+			$("#wrapper #content #infoRegistration #pol").show();
+			$("#wrapper #content #infoRegistration #ages").show();
 		}
 	});
 	$("#wrapper #content #infoRegistration #accept").click(function(){
@@ -95,9 +97,19 @@
 		var gender = $("select[name=gender]").val();
 		var age = $("input[name=age]").val();
 		var phone = $("input[name=phone]").val();
-		var type = $("input[name=type]:checked").val();
+		var type = Number($("input[name=type]:checked").val())+1;
 		var car = $("input[name=car]").val();
 		alert("Логин:"+login+"\n"+"Пароль:"+password+"\n"+"Имя:"+name+"\n"+"Пол:"+gender+"\n"+"Возраст:"+age+"\n"+"Номер телефона:"+phone+"\n"+"Тип:"+type+"\n"+"Марка машины:"+car+"\nРегистрация пройдена!");
+		$.ajax({
+		url: 'ajax/reg.php',
+		type: 'Post',
+		cache: false,
+		data: {'login': login, 'password':password, 'name':name, 'gender':gender, 'age':age, 'phone':phone, 'type':type, 'car':car},
+		dataType: 'html',
+		success: function (data){
+			alert(data);
+		}
+	});
 	});
 </script>
 
