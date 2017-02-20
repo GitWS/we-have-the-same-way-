@@ -1,33 +1,38 @@
 <?php
-	require_once ("./script/config.php");
+	define("HOST","10.10.14.181");
+	define("DATABASE","ws_database");
+	define("USER","sony"); //sony
+	define("PASSWORD","root"); //root
 
-	$login = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['login']));
-	$password = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['password']));
-	$name = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['name']));
-	$gender = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['gender']));
-	$age = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['age']));
-	$phone = iconv("UTF-8", "windows-1251"htmlspecialchars($_POST['phone']));
-	$type = $_POST['type'];
-	$car = iconv("UTF-8", "windows-1251",htmlspecialchars($_POST['car']));
+	$connect = mysqli_connect(HOST,USER,PASSWORD) or die("Ошибка подключения к серверу");
+	$bd = mysqli_select_db($connect,DATABASE) or die(' База данных не найдена или отсутствует доступ.');
 
-	$query = "call reg_new(\"".$login."\",\"".$password."\",".(int)$type.");";
+	$login = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['login']));
+	$password = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['password']));
+	$name = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['name']));
+	$gender = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['gender']));
+	$age = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['age']));
+	$phone = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['phone']));
+	$type = $_GET['type'];
+	$car = iconv("UTF-8", "windows-1251",htmlspecialchars($_GET['car']));
 
-	if(!($result = mysqli_query($connect, $query))){
-		echo "Ошибка при запросе: ".mysqli_error();
-	}
+	$query = "call reg_new(\"".$login."\",\"".$password."\",".$type.");";
+	$result = mysqli_query($connect,$query);
 
-	//$res_select = mysqli_query($con, "select @result;");
+	$query_auth = "call auth(\"".$login."\",\"".$password."\",@result);";
+	$result_auth = mysqli_query($connect,$query_auth);
 
-	/*while($row= mysqli_fetch_row($res_select)){
+	$query_res = "select @result;";
+	$result_auth_select = mysqli_query($connect,$query_res);
+
+	while($row= mysqli_fetch_row($result_auth_select))
 		$res_query = $row[0];
-	}*/
-
-	/*if($res_query == 1){
-		echo 'Вы авторизировались!';
-		session_start();
-		$_SESSION['LoginUser'] = $log;
-		$_SESSION['Connect'] = 1;
+	
+	if ((int)$res_query == 1) {
+		/*$query_to_profile = "call create_profile('".$login."','".$name."','".$phone."','".$age."','".$gender."','".$car."');";
+		$result_profile = mysqli_query($connect,$query_to_profile);*/
+		echo "Регистрация прошла успешно!";
+	} else {
+		echo "Ошибка регестрации!";
 	}
-	else
-		echo 'Произошла ошибка!';*/
 ?>

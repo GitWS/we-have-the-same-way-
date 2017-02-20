@@ -2,9 +2,6 @@
 <html>
 <head>
 	<?php require_once ("blocks/head.php") ?>
-	<?php 
-	require_once ("script/config.php");
-	?>
 </head>
 <body>
 
@@ -97,16 +94,16 @@
 		var gender = $("select[name=gender]").val();
 		var age = $("input[name=age]").val();
 		var phone = $("input[name=phone]").val();
-		var type = Number($("input[name=type]:checked").val())+1;
+		var type = $("input[name=type]:checked").val();
 		var car = $("input[name=car]").val();
-		alert("Логин:"+login+"\n"+"Пароль:"+password+"\n"+"Имя:"+name+"\n"+"Пол:"+gender+"\n"+"Возраст:"+age+"\n"+"Номер телефона:"+phone+"\n"+"Тип:"+type+"\n"+"Марка машины:"+car+"\nРегистрация пройдена!");
+		//alert("Логин:"+login+"\n"+"Пароль:"+password+"\n"+"Имя:"+name+"\n"+"Пол:"+gender+"\n"+"Возраст:"+age+"\n"+"Номер телефона:"+phone+"\n"+"Тип:"+type+"\n"+"Марка машины:"+car+"\nРегистрация пройдена!");
 		$.ajax({
 		url: 'ajax/reg.php',
-		type: 'Post',
+		type: 'GET',
 		cache: false,
 		data: {'login': login, 'password':password, 'name':name, 'gender':gender, 'age':age, 'phone':phone, 'type':type, 'car':car},
 		dataType: 'html',
-		success: function (data){
+		success: function(data){
 			alert(data);
 		}
 	});

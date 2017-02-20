@@ -2,9 +2,6 @@
 <html>
 <head>
 	<?php require_once ("blocks/head.php") ?>
-	<?php 
-	require_once ("script/config.php");
-	?>
 </head>
 <body>
 
