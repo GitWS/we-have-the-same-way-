@@ -2,10 +2,10 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 18, 2017 at 09:03 AM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.1.1
+-- Хост: 127.0.0.1
+-- Время создания: Фев 20 2017 г., 12:17
+-- Версия сервера: 10.1.21-MariaDB
+-- Версия PHP: 7.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,12 +17,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ws_database`
+-- База данных: `ws_database`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Процедуры
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `auth` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(45) CHARSET cp1251, OUT `result` INT)  NO SQL
 IF EXISTS (SELECT * FROM reg_data WHERE reg_login = login AND reg_pass = pass) THEN
@@ -34,6 +34,21 @@ END IF$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_new_order` (IN `date_time` DATETIME, IN `need_point1` VARCHAR(45) CHARSET cp1251, IN `meet_point1` VARCHAR(45) CHARSET cp1251, IN `ride_price` VARCHAR(45) CHARSET cp1251, IN `ride_comment1` VARCHAR(255) CHARSET cp1251)  NO SQL
 INSERT INTO ride_rider_table (date_time_ride, need_point, meet_point, ride_price, ride_comment)
 VALUES (date_time, need_point1, meet_point1, ride_price, ride_price)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_profile` (IN `login` VARCHAR(45), IN `name` VARCHAR(45), IN `phone` VARCHAR(45), IN `age` VARCHAR(45), IN `sex` VARCHAR(45), IN `machine_mark` VARCHAR(45))  NO SQL
+IF EXISTS (SELECT id_reg_data FROM reg_data WHERE login = reg_login) THEN
+IF ((SELECT id_stat_type FROM reg_data WHERE login = reg_login) = 1) THEN
+INSERT INTO profile_rider (profile_rider_age, profile_rider_name, profile_rider_phone, profile_rider_machine_mark,profile_rider_sex)
+VALUES (age,name,phone,machine_mark,sex);
+UPDATE profile_rider
+SET rider_id_reg_data = (SELECT id_reg FROM reg_data WHERE login = reg_login);
+ELSEIF ((SELECT id_stat_type FROM reg_data WHERE login = reg_login) = 2) THEN
+INSERT INTO profile_pass (profile_pass_name, profile_pass_phone)
+VALUES (name,phone);
+UPDATE profile_pass
+SET reg_data_id_f = (SELECT id_reg FROM reg_data WHERE login = reg_login);
+END IF;
+END IF$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `reg_new` (IN `login` VARCHAR(45) CHARSET cp1251, IN `pass` VARCHAR(45) CHARSET cp1251, IN `reg_type` INT)  NO SQL
 IF NOT EXISTS(SELECT * FROM reg_data WHERE reg_login = login AND reg_pass = pass) THEN
@@ -59,7 +74,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pass_ride_order`
+-- Структура таблицы `pass_ride_order`
 --
 
 CREATE TABLE `pass_ride_order` (
@@ -73,7 +88,7 @@ CREATE TABLE `pass_ride_order` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profile_pass`
+-- Структура таблицы `profile_pass`
 --
 
 CREATE TABLE `profile_pass` (
@@ -86,7 +101,7 @@ CREATE TABLE `profile_pass` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profile_rider`
+-- Структура таблицы `profile_rider`
 --
 
 CREATE TABLE `profile_rider` (
@@ -100,7 +115,7 @@ CREATE TABLE `profile_rider` (
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
 --
--- Dumping data for table `profile_rider`
+-- Дамп данных таблицы `profile_rider`
 --
 
 INSERT INTO `profile_rider` (`profile_rider_id`, `profile_rider_name`, `profile_rider_sex`, `profile_rider_age`, `profile_rider_machine_mark`, `profile_rider_phone`, `rider_id_reg_data`) VALUES
@@ -109,7 +124,7 @@ INSERT INTO `profile_rider` (`profile_rider_id`, `profile_rider_name`, `profile_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reg_data`
+-- Структура таблицы `reg_data`
 --
 
 CREATE TABLE `reg_data` (
@@ -120,20 +135,18 @@ CREATE TABLE `reg_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
 --
--- Dumping data for table `reg_data`
+-- Дамп данных таблицы `reg_data`
 --
 
 INSERT INTO `reg_data` (`id_reg_data`, `reg_login`, `reg_pass`, `id_stat_type`) VALUES
 (1, 'login', 'password', 1),
-(2, 'login1', 'password', 2),
-(3, 'login', 'password', 1),
-(4, 'login', 'password', 1),
-(6, 'dawdawd', 'dawdadzfdfhfther', 2);
+(2, '123', '123', 1),
+(3, 'ty', 'ty', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reg_type_table`
+-- Структура таблицы `reg_type_table`
 --
 
 CREATE TABLE `reg_type_table` (
@@ -143,7 +156,7 @@ CREATE TABLE `reg_type_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
 --
--- Dumping data for table `reg_type_table`
+-- Дамп данных таблицы `reg_type_table`
 --
 
 INSERT INTO `reg_type_table` (`stat_id`, `type_name`, `reg_type`) VALUES
@@ -153,7 +166,7 @@ INSERT INTO `reg_type_table` (`stat_id`, `type_name`, `reg_type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ride_rider_table`
+-- Структура таблицы `ride_rider_table`
 --
 
 CREATE TABLE `ride_rider_table` (
@@ -167,114 +180,114 @@ CREATE TABLE `ride_rider_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=cp1251 COLLATE=cp1251_bin;
 
 --
--- Indexes for dumped tables
+-- Индексы сохранённых таблиц
 --
 
 --
--- Indexes for table `pass_ride_order`
+-- Индексы таблицы `pass_ride_order`
 --
 ALTER TABLE `pass_ride_order`
   ADD PRIMARY KEY (`passenger_id_ride`),
   ADD KEY `by_pass_created_id` (`by_pass_created_id`);
 
 --
--- Indexes for table `profile_pass`
+-- Индексы таблицы `profile_pass`
 --
 ALTER TABLE `profile_pass`
   ADD PRIMARY KEY (`profile_pass_id`),
   ADD KEY `reg_data_id_fk_constraint` (`reg_data_id_f`);
 
 --
--- Indexes for table `profile_rider`
+-- Индексы таблицы `profile_rider`
 --
 ALTER TABLE `profile_rider`
   ADD PRIMARY KEY (`profile_rider_id`),
   ADD KEY `reg_data_id_rider_constraint` (`rider_id_reg_data`);
 
 --
--- Indexes for table `reg_data`
+-- Индексы таблицы `reg_data`
 --
 ALTER TABLE `reg_data`
   ADD PRIMARY KEY (`id_reg_data`),
   ADD KEY `fk_reg_type` (`id_stat_type`);
 
 --
--- Indexes for table `reg_type_table`
+-- Индексы таблицы `reg_type_table`
 --
 ALTER TABLE `reg_type_table`
   ADD PRIMARY KEY (`stat_id`);
 
 --
--- Indexes for table `ride_rider_table`
+-- Индексы таблицы `ride_rider_table`
 --
 ALTER TABLE `ride_rider_table`
   ADD PRIMARY KEY (`id_ride`),
   ADD KEY `creator_id` (`creator_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT для сохранённых таблиц
 --
 
 --
--- AUTO_INCREMENT for table `pass_ride_order`
+-- AUTO_INCREMENT для таблицы `pass_ride_order`
 --
 ALTER TABLE `pass_ride_order`
-  MODIFY `passenger_id_ride` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `passenger_id_ride` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `profile_pass`
+-- AUTO_INCREMENT для таблицы `profile_pass`
 --
 ALTER TABLE `profile_pass`
   MODIFY `profile_pass_id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `profile_rider`
+-- AUTO_INCREMENT для таблицы `profile_rider`
 --
 ALTER TABLE `profile_rider`
-  MODIFY `profile_rider_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `profile_rider_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT for table `reg_data`
+-- AUTO_INCREMENT для таблицы `reg_data`
 --
 ALTER TABLE `reg_data`
-  MODIFY `id_reg_data` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_reg_data` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `reg_type_table`
+-- AUTO_INCREMENT для таблицы `reg_type_table`
 --
 ALTER TABLE `reg_type_table`
   MODIFY `stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `ride_rider_table`
+-- AUTO_INCREMENT для таблицы `ride_rider_table`
 --
 ALTER TABLE `ride_rider_table`
   MODIFY `id_ride` int(11) NOT NULL AUTO_INCREMENT;
 --
--- Constraints for dumped tables
+-- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
--- Constraints for table `pass_ride_order`
+-- Ограничения внешнего ключа таблицы `pass_ride_order`
 --
 ALTER TABLE `pass_ride_order`
   ADD CONSTRAINT `pass_ride_order_ibfk_1` FOREIGN KEY (`by_pass_created_id`) REFERENCES `profile_pass` (`profile_pass_id`);
 
 --
--- Constraints for table `profile_pass`
+-- Ограничения внешнего ключа таблицы `profile_pass`
 --
 ALTER TABLE `profile_pass`
   ADD CONSTRAINT `reg_data_id_fk_constraint` FOREIGN KEY (`reg_data_id_f`) REFERENCES `reg_data` (`id_reg_data`);
 
 --
--- Constraints for table `profile_rider`
+-- Ограничения внешнего ключа таблицы `profile_rider`
 --
 ALTER TABLE `profile_rider`
   ADD CONSTRAINT `reg_data_id_rider_constraint` FOREIGN KEY (`rider_id_reg_data`) REFERENCES `reg_data` (`id_reg_data`);
 
 --
--- Constraints for table `reg_data`
+-- Ограничения внешнего ключа таблицы `reg_data`
 --
 ALTER TABLE `reg_data`
   ADD CONSTRAINT `fk_reg_type` FOREIGN KEY (`id_stat_type`) REFERENCES `reg_type_table` (`stat_id`);
 
 --
--- Constraints for table `ride_rider_table`
+-- Ограничения внешнего ключа таблицы `ride_rider_table`
 --
 ALTER TABLE `ride_rider_table`
   ADD CONSTRAINT `ride_rider_table_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `profile_rider` (`profile_rider_id`);
