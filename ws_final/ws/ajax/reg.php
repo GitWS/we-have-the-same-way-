@@ -1,8 +1,8 @@
 <?php
-	define("HOST","127.0.0.1");
+	define("HOST","10.10.14.181");
 	define("DATABASE","ws");
-	define("USER","root"); //sony
-	define("PASSWORD",""); //root
+	define("USER","sony"); //sony
+	define("PASSWORD","root"); //root
 
 	$connect = mysqli_connect(HOST,USER,PASSWORD,DATABASE) or die("Ошибка подключения к серверу");
 

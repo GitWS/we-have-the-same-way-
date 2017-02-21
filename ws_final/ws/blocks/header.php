@@ -4,10 +4,10 @@
 		if(!isset($_SESSION['FILTER'])){
 			$_SESSION['FILTER'] = 0;
 		}
-		define("HOST","127.0.0.1");
+		define("HOST","10.10.14.181");
 		define("DATABASE","ws");
-		define("USER","root"); //sony
-		define("PASSWORD",""); //root
+		define("USER","sony"); //sony
+		define("PASSWORD","root"); //root
 	?>
 	<div id="logo">
 		<center><a href="./index.php">Нам по пути!</a></center>
@@ -20,16 +20,19 @@
 
 		<div id="menuUser">
 			<nav class="menu">
-  				<ul>
+  				<ul class="menuUI">
 				    <li><a href="#">Меню</a>
 						<ul>
-				        <li id="search">Поиск предложения по коментарию</li>
-						<li id="popular">Популярный маршрут</li>
-						<li id="rare">Самый редкий маршрут</li>
+						<!--<li id="popular">Популярный маршрут</li>
+						<li id="rare">Самый редкий маршрут</li>-->
 						<li id="createOrder">Создать предложение</li>
 				      	</ul>
 				    </li>
 			  	</ul>
+			  	<!--<form class="menuUI1">
+			  		<label>Поиск:</label>
+			  		<input type="" name="" id="search" />
+			  	</form>-->
 			</nav>
 		</div>
 	</div>
@@ -99,9 +102,9 @@
 			location.href = "./index.php";
 		});
 		//Функции меню
-		$(".menu #search").click(function(){
-			alert("Функция не работает");
-		});
+		/*$(".menu #search").click(function(){
+			alert("Поиск");
+		});*/
 		$(".menu #popular").click(function(){
 			alert("Функция не работает");
 		});

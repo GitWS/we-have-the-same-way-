@@ -20,13 +20,13 @@
 
 			$connect = mysqli_connect(HOST,USER,PASSWORD,DATABASE) or die("Ошибка подключения к серверу");
 			if((int)$_SESSION['FILTER'] == 0){
-				$result = mysqli_query($connect,"select * from orders;");
+				$result = mysqli_query($connect,"select * from orders where date_go>=\"".date('Y-m-d')."\";");
 			}
 			if((int)$_SESSION['FILTER'] == 1){
-				$result = mysqli_query($connect,"select * from orders where gender=\"Мужчина\";");
+				$result = mysqli_query($connect,"select * from orders where gender=\"Мужчина\" and date_go>=\"".date('Y-m-d')."\";");
 			}
 			if((int)$_SESSION['FILTER'] == 2) {
-				$result = mysqli_query($connect,"select * from orders where gender=\"Женщина\";");
+				$result = mysqli_query($connect,"select * from orders where gender=\"Женщина\" and date_go>=\"".date('Y-m-d')."\";");
 			}
 
 			while ($row = mysqli_fetch_row($result)) {

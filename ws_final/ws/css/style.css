@@ -69,6 +69,20 @@ textarea {
 .order{
 	margin-bottom: 10px;
 }
+
+.menuUI{
+	float: left;
+}
+
+.menuUI1{
+	float: left;
+}
+
+.ui-autocomplete {
+        max-height: 20em;
+        overflow: hidden;
+        overflow-y: scroll;
+}
 /* Стили шапки */
 
 header {
