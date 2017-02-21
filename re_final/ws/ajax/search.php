@@ -1,8 +1,8 @@
 <?php
-	define("HOST","10.10.14.181");
+	define("HOST","localhost");
 	define("DATABASE","ws");
-	define("USER","sony"); //sony
-	define("PASSWORD","root"); //root
+	define("USER","root"); //sony
+	define("PASSWORD",""); //root
 
 	require_once 'safemysql.class.php'; 
 	 

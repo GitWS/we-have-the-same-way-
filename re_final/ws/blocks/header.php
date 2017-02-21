@@ -4,10 +4,10 @@
 		if(!isset($_SESSION['FILTER'])){
 			$_SESSION['FILTER'] = 0;
 		}
-		define("HOST","10.10.14.181");
-		define("DATABASE","ws");
-		define("USER","sony"); //sony
-		define("PASSWORD","root"); //root
+		define("HOST","localhost");
+	define("DATABASE","ws");
+	define("USER","root"); //sony
+	define("PASSWORD",""); //root
 	?>
 	<div id="logo">
 		<center><a href="./index.php">Нам по пути!</a></center>

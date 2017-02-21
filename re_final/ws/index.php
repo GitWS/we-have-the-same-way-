@@ -43,17 +43,36 @@
 				echo "<label>Пол автора: (".$row[6].")</label><br>";
 				echo "<label>Поездка из ".$row[2]." в ".$row[3]."</label><br>";
 				echo "<label><a href=\"order.php?date_time_add=".$row[13]."\">Подробнее....</a></label><br>";
-				if((int)$row[14] == 0){
-					echo "<input type=\"sumbit\" class=\".request\" value=\"Подписатся на поездку добавленную ".$row[13]."\">";
+				if((int)$row[14] == 0 and isset($_SESSION['CONNECT'])){
+					echo "<button><a style=\"color: white;\" href=\"ajax/pop.php?id=".$row[17]."\">Подписатся на поездку</a></button>";
 				}
 				echo "</fieldset>";
 				echo "</form>";
 				echo "</div>";
 			}
 
-			$result_popular = mysqli_query($connect,"select max(login) from orders;");
+
+			$pops = -1;
+			$pops_id = -1;
+			$pops_count = -1;
+			$popular_user = "";
+			
+			$result_popular = mysqli_query($connect,"select user_id, count(*) from table_order group by user_id;");
 			while ($row = mysqli_fetch_row($result_popular)) {
-				$popular_user = $row[0];
+				if($pops == -1){
+					$pops_id = (int)$row[0];
+					$pops_count = (int)$row[1];
+					$pops = 0;
+				} else {
+					if($pops_count < (int)$row[1]){
+						$pops_id = (int)$row[0];
+						$pops_count = (int)$row[1];
+					}
+				}
+			}
+			$result_popular2 = mysqli_query($connect,"select login from table_uesr where id = ".$pops_id.";");
+			while ($row = mysqli_fetch_row($result_popular2)) {
+				$popular_user = (string)$row[0];
 			}
 		?>
 	</div>

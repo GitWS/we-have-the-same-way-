@@ -35,6 +35,11 @@
 				echo "<label>Марка машины: ".$row[8]."</label><br>";
 				echo "<label>Номер водителя: ".$row[9]."</label><br>";
 				echo "<label>Коментарий к поездке: ".$row[11]."</label><br>";
+				if((int)$row[14] == 1){
+					echo "<label>Информация о пассажире присоеденившемся к поездке:</label><br>";
+					echo "<label>Имя пассажира: ".$row[15]."</label><br>";
+					echo "<label>Телефон пассажира: ".$row[16]."</label>";
+				}
 				echo "</fieldset>";
 				echo "</form>";
 				echo "</div>";
